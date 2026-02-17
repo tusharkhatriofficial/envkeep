@@ -1,38 +1,28 @@
-<p align="center">
-  <h1 align="center">dotkeep</h1>
-  <p align="center">
-    <strong>Your .env files, encrypted locally. No accounts. No cloud. Just works.</strong>
-  </p>
-  <p align="center">
-    <a href="#install">Install</a> &bull;
-    <a href="#quick-start">Quick Start</a> &bull;
-    <a href="#commands">Commands</a> &bull;
-    <a href="#why-dotkeep">Why dotkeep?</a> &bull;
-    <a href="#security">Security</a>
-  </p>
-</p>
+# dotkeep
 
-<br>
+Local `.env` manager. Encrypted. No cloud. No accounts.
 
-You have **12 projects**. Each has a `.env` file. Some share the same `DATABASE_URL`. You copy-paste secrets between them. One day you `rm -rf` the wrong folder. The secrets are gone forever.
+---
 
-**dotkeep fixes this in 30 seconds:**
+You have 12 projects on your machine. Each has a `.env` file. Half the secrets are copy-pasted between them. You cannot search across them. You cannot diff them. You cannot back them up. One bad `rm -rf` and they are gone.
+
+dotkeep is a single encrypted vault for all of them.
 
 ```bash
-dotkeep init                  # set a master password
-cd ~/code/my-saas && dotkeep add my-saas     # encrypt & store .env
+dotkeep init                                 # set a master password
+cd ~/code/my-saas && dotkeep add my-saas     # encrypt and store .env
 cd ~/code/api && dotkeep add api             # again
 cd ~/code/landing && dotkeep add landing     # and again
 
-# Two months later, new laptop:
-dotkeep use my-saas           # .env restored instantly
+# later, new laptop, whatever:
+dotkeep use my-saas                          # .env restored
 ```
 
-That's it. Every `.env` value is encrypted with **AES-256-GCM**, stored in an encrypted **SQLCipher** database, and unlocked with a single master password you keep in your head.
+Every value is encrypted with AES-256-GCM, stored in an encrypted SQLCipher database, and unlocked with a single master password.
 
-<br>
+---
 
-## See it in action
+## What it looks like
 
 ```
 $ dotkeep list
@@ -70,219 +60,206 @@ $ dotkeep inspect my-saas
 └──────────────────┴──────────────────────────────┘
 
 $ dotkeep use my-saas
-  ✅ Wrote 28 variables to .env
+  Wrote 28 variables to .env
 ```
 
-<br>
+---
 
-<h2 id="install">Install</h2>
+## Status
+
+**dotkeep is under active development and has not been released yet.**
+
+To try it now, build from source:
 
 ```bash
-cargo install dotkeep
+git clone https://github.com/tusharkhatriofficial/dotkeep.git
+cd dotkeep
+cargo build --release
+./target/release/dotkeep --help
 ```
 
-**Pre-built binaries** (Linux, macOS, Windows):
+Requires Rust 1.70+ and a C compiler (for SQLCipher). Pre-built binaries and `cargo install` will be available at first stable release.
 
-```bash
-# macOS
-brew install tusharkhatriofficial/tap/dotkeep
+---
 
-# Linux
-curl -sSf https://github.com/tusharkhatriofficial/dotkeep/releases/latest/download/dotkeep-linux-amd64.tar.gz | tar -xzv
-sudo mv dotkeep /usr/local/bin/
-
-# Windows (PowerShell)
-Invoke-WebRequest -Uri "https://github.com/tusharkhatriofficial/dotkeep/releases/latest/download/dotkeep-windows-amd64.exe" -OutFile "dotkeep.exe"
-```
-
-<br>
-
-<h2 id="quick-start">Quick Start</h2>
+## Quick start
 
 **1. Create your vault**
-```bash
+```
 $ dotkeep init
   Creating a new vault. Choose a master password.
-  Enter master password: ••••••••
-  Confirm master password: ••••••••
-  ✅ Vault created at ~/.dotkeep/vault.db
+  Enter master password: --------
+  Confirm master password: --------
+  Vault created at ~/.dotkeep/vault.db
 ```
 
-**2. Store a project's `.env`**
-```bash
+**2. Store a project**
+```
 $ cd ~/code/my-saas
 $ dotkeep add my-saas
-  ✅ Added project my-saas with 28 variables
+  Added project my-saas with 28 variables
 ```
 
-**3. Restore it anywhere, anytime**
-```bash
+**3. Restore it anywhere**
+```
 $ cd ~/code/my-saas
 $ dotkeep use my-saas
-  ✅ Wrote 28 variables to .env
+  Wrote 28 variables to .env
 ```
 
-Done. Your secrets are safe.
+---
 
-<br>
+## Commands
 
-<h2 id="commands">Commands</h2>
+### Core
 
-### Core workflow
-
-| Command | What it does |
+| Command | Description |
 |---|---|
 | `dotkeep init` | Create encrypted vault, set master password |
-| `dotkeep add <name>` | Scan `.env` in current dir, encrypt & store |
-| `dotkeep use <name>` | Restore `.env` from vault to current dir |
-| `dotkeep list` | Show all projects in a table |
+| `dotkeep add <name>` | Read `.env` from current directory, encrypt, store |
+| `dotkeep use <name>` | Write decrypted `.env` to current directory |
+| `dotkeep list` | List all projects |
 | `dotkeep remove <name>` | Delete a project from the vault |
 
-### Inspect & compare
+### Inspect and compare
 
-| Command | What it does |
+| Command | Description |
 |---|---|
-| `dotkeep inspect <name>` | Show variables (secrets auto-masked) |
-| `dotkeep diff <proj1> <proj2>` | Compare two projects side-by-side |
-| `dotkeep search <key>` | Find which projects use a key (e.g. `DATABASE_URL`) |
-| `dotkeep unused <name>` | Detect dead variables not referenced in code |
-| `dotkeep validate <name>` | Catch mistakes: invalid ports, malformed URLs |
+| `dotkeep inspect <name>` | Show variables with secrets masked |
+| `dotkeep diff <a> <b>` | Compare variables between two projects |
+| `dotkeep search <key>` | Find which projects use a given key |
+| `dotkeep unused <name>` | Find variables not referenced in source code |
+| `dotkeep validate <name>` | Check for common mistakes (bad ports, malformed URLs) |
 | `dotkeep types <name>` | Infer variable types (string, number, boolean, URL) |
 
-### Secrets & sharing
+### Secrets and sharing
 
-| Command | What it does |
+| Command | Description |
 |---|---|
 | `dotkeep secrets set KEY=VALUE` | Store an encrypted shared secret |
-| `dotkeep secrets list` | List all secrets (masked) |
-| `dotkeep secrets link <key> <project>` | Link a secret to a project |
-| `dotkeep sync <from> <to>` | Copy common vars between projects |
+| `dotkeep secrets list` | List all secrets (values masked) |
+| `dotkeep secrets link <key> <project>` | Link a shared secret to a project |
+| `dotkeep sync <from> <to>` | Copy common variables between projects |
 | `dotkeep export <name>` | Export project as encrypted `.envvault` file |
 | `dotkeep import <file>` | Import from `.envvault` file |
 
-### Backup & restore
+### Backup and ops
 
-| Command | What it does |
+| Command | Description |
 |---|---|
-| `dotkeep backup` | Export entire vault as encrypted backup |
-| `dotkeep restore <file>` | Restore vault from backup file |
-| `dotkeep status` | Show currently active project |
-| `dotkeep recent` | Switch to a recently used project |
+| `dotkeep backup` | Full vault backup (encrypted) |
+| `dotkeep restore <file>` | Restore vault from backup |
+| `dotkeep status` | Show active project |
+| `dotkeep recent` | Switch to recently used project |
 
 ### Terminal UI
 
-```bash
-dotkeep tui
+```
+$ dotkeep tui
 ```
 
-Full-screen interface built with [ratatui](https://github.com/ratatui/ratatui). Navigate projects, edit variables, search, and sync — all from your terminal.
+Full-screen terminal interface. Navigate projects, edit variables, search across the vault.
 
 ```
-┌─ dotkeep ──────────────────────────────┐
-│ 📁 Projects (4)                        │
-│                                        │
-│ ▶ my-saas       28 vars    2h ago  🟢  │
-│   api           45 vars    3h ago  🟢  │
-│   landing-page  12 vars    1d ago  🟡  │
-│   worker         8 vars    2d ago  🟢  │
-│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ │
-│ / Search    e Edit    s Sync    q Quit │
-└────────────────────────────────────────┘
++-  dotkeep  -----------------------------------+
+|  Projects (4)                                  |
+|                                                |
+|  > my-saas       28 vars    2h ago             |
+|    api           45 vars    3h ago             |
+|    landing-page  12 vars    1d ago             |
+|    worker         8 vars    2d ago             |
+|  ------------------------------------------   |
+|  /  Search    e  Edit    s  Sync    q  Quit    |
++------------------------------------------------+
 ```
 
-<br>
+---
 
-<h2 id="why-dotkeep">Why dotkeep?</h2>
+## Why
 
-### The problem
-
-Every developer has this:
+Every developer has this problem:
 
 ```
 ~/code/
-├── my-saas/.env          # 28 vars, half are copy-pasted from api/
-├── api/.env              # 45 vars, STRIPE_KEY duplicated in 3 places
-├── landing/.env          # forgot to update DATABASE_URL after migration
-├── worker/.env           # is this the right REDIS_URL?
-└── side-project/.env     # what's even in here?
+  my-saas/.env          # 28 vars, half copy-pasted from api/
+  api/.env              # 45 vars, STRIPE_KEY duplicated in 3 places
+  landing/.env          # forgot to update DATABASE_URL after migration
+  worker/.env           # is this the right REDIS_URL?
+  side-project/.env     # what is even in here?
 ```
 
-You can't search across them. You can't compare them. You can't back them up. You copy-paste secrets and pray nothing breaks.
+No search. No diff. No backup. Just scattered plaintext files with production credentials in them.
 
-### The solution
+dotkeep replaces all of that with one encrypted file:
 
 ```
-~/.dotkeep/vault.db       # one encrypted file, all your secrets
+~/.dotkeep/vault.db
 ```
 
-### vs. the alternatives
+### Comparison
 
-| | **dotkeep** | **Doppler** | **Infisical** | **direnv** |
+| | dotkeep | Doppler | Infisical | direnv |
 |---|---|---|---|---|
-| **Cost** | Free forever | $20+/month | $10+/month | Free |
-| **Storage** | Local (your machine) | Cloud | Cloud | `.envrc` files |
-| **Encryption** | AES-256-GCM + SQLCipher | Server-side | Server-side | None |
-| **Account required** | No | Yes | Yes | No |
-| **Cross-project search** | Yes | Limited | Limited | No |
-| **Dead var detection** | Yes | No | No | No |
-| **TUI** | Yes | No | No | No |
-| **Binary size** | ~3 MB | ~40 MB | ~35 MB | ~5 MB |
-| **Startup time** | ~5 ms | ~45 ms | ~30 ms | ~12 ms |
+| Cost | Free | $20+/mo | $10+/mo | Free |
+| Storage | Local | Cloud | Cloud | .envrc files |
+| Encryption | AES-256-GCM + SQLCipher | Server-side | Server-side | None |
+| Account required | No | Yes | Yes | No |
+| Cross-project search | Yes | Limited | Limited | No |
+| Dead variable detection | Yes | No | No | No |
+| Terminal UI | Yes | No | No | No |
 
-<br>
+---
 
-<h2 id="security">Security</h2>
+## Security
 
 ```
 Master Password
-      │
-      ▼  PBKDF2-HMAC-SHA256 (100,000 iterations) + random salt
-      │
+      |
+      v  PBKDF2-HMAC-SHA256 (100,000 iterations) + random salt
+      |
  Derived Key (32 bytes)
-      │
-      ├──▶ SQLCipher (encrypts entire database file)
-      │
-      └──▶ AES-256-GCM (encrypts each variable value individually)
+      |
+      +---> SQLCipher (encrypts entire database file)
+      |
+      +---> AES-256-GCM (encrypts each variable value individually)
 ```
 
 - **Master password is never stored.** Only a verification hash derived via PBKDF2.
-- **Double encryption.** The database file itself is encrypted (SQLCipher), AND each value inside is encrypted separately (AES-256-GCM with unique nonces).
-- **Zero plaintext on disk.** After `dotkeep use` writes your `.env`, no secrets remain in the vault unencrypted.
-- **Tamper detection.** GCM mode guarantees integrity — any modification to ciphertext is detected.
-- **Crypto stack:** [`ring`](https://github.com/briansmith/ring) (same library used by Cloudflare, Fastly, and rustls).
+- **Double encryption.** The database file is encrypted with SQLCipher. Each value inside is encrypted separately with AES-256-GCM and a unique nonce.
+- **Zero plaintext on disk.** Nothing in the vault is ever stored unencrypted.
+- **Tamper detection.** GCM mode provides authenticated encryption. Any modification to ciphertext is detected and rejected.
+- **Cryptography by [`ring`](https://github.com/briansmith/ring)** -- the same library behind rustls, Cloudflare, and Fastly.
 
-<br>
+---
 
 ## How it works
 
 ```
-$ dotkeep add my-saas
+dotkeep add my-saas:
+  1. Read .env from current directory
+  2. Parse KEY=VALUE pairs (handles quotes, comments, inline comments)
+  3. Encrypt each value individually with AES-256-GCM
+  4. Store in ~/.dotkeep/vault.db (SQLCipher-encrypted database)
 
-  1. Reads .env from current directory
-  2. Parses KEY=VALUE pairs (handles quotes, comments, multiline)
-  3. Encrypts each value with AES-256-GCM using your derived key
-  4. Stores in ~/.dotkeep/vault.db (encrypted SQLCipher database)
-
-$ dotkeep use my-saas
-
-  1. Unlocks vault with your master password
-  2. Decrypts each variable value
-  3. Writes clean .env file to current directory
+dotkeep use my-saas:
+  1. Unlock vault with master password
+  2. Decrypt each variable
+  3. Write .env to current directory
 ```
 
-<br>
+---
 
-## Tech stack
+## Built with
 
-| Component | Library | Why |
-|---|---|---|
-| CLI parsing | [clap](https://github.com/clap-rs/clap) | Best-in-class Rust CLI framework |
-| Encryption | [ring](https://github.com/briansmith/ring) | Industry-standard cryptography |
-| Database | [rusqlite](https://github.com/rusqlite/rusqlite) + SQLCipher | Encrypted SQLite, zero setup |
-| Terminal UI | [ratatui](https://github.com/ratatui/ratatui) | Modern TUI framework |
-| Password input | [rpassword](https://github.com/conradkleinespel/rpassword) | Secure hidden input |
+| | |
+|---|---|
+| [clap](https://github.com/clap-rs/clap) | CLI argument parsing |
+| [ring](https://github.com/briansmith/ring) | AES-256-GCM encryption, PBKDF2 key derivation |
+| [rusqlite](https://github.com/rusqlite/rusqlite) + SQLCipher | Encrypted database |
+| [ratatui](https://github.com/ratatui/ratatui) | Terminal UI |
+| [rpassword](https://github.com/conradkleinespel/rpassword) | Hidden password input |
 
-<br>
+---
 
 ## Contributing
 
@@ -294,20 +271,8 @@ cargo test
 cargo run -- init
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
-
-<br>
+---
 
 ## License
 
-MIT — do whatever you want.
-
-<br>
-
----
-
-<p align="center">
-  <strong>Stop copy-pasting secrets. Start keeping them safe.</strong>
-  <br>
-  <code>cargo install dotkeep</code>
-</p>
+MIT
