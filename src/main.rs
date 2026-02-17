@@ -5,8 +5,9 @@ mod tui;
 
 use clap::Parser;
 use cli::{Cli, Commands, SecretsAction};
+use anyhow::Result;
 
-fn main() {
+fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
@@ -47,5 +48,9 @@ fn main() {
         Commands::Export { project } => println!("dotkeep export: {}...", project),
         Commands::Import { file } => println!("dotkeep import: from {}...", file),
         Commands::Tui => println!("dotkeep tui: launching..."),
+        _=> {
+            println!("Command not implemented yet.");
+        }
     }
+    Ok(())
 }
