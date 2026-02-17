@@ -1,12 +1,22 @@
-# dotkeep
+<p align="center">
+  <h1 align="center">dotkeep</h1>
+  <p align="center">
+    <strong>Your .env files, encrypted locally. No accounts. No cloud. Just works.</strong>
+  </p>
+  <p align="center">
+    <a href="#status">Status</a> &bull;
+    <a href="#quick-start">Quick Start</a> &bull;
+    <a href="#commands">Commands</a> &bull;
+    <a href="#why">Why</a> &bull;
+    <a href="#security">Security</a>
+  </p>
+</p>
 
-Local `.env` manager. Encrypted. No cloud. No accounts.
-
----
+<br>
 
 You have 12 projects on your machine. Each has a `.env` file. Half the secrets are copy-pasted between them. You cannot search across them. You cannot diff them. You cannot back them up. One bad `rm -rf` and they are gone.
 
-dotkeep is a single encrypted vault for all of them.
+**dotkeep fixes this in 30 seconds:**
 
 ```bash
 dotkeep init                                 # set a master password
