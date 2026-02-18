@@ -2,6 +2,7 @@ mod cli;
 mod crypto;
 mod vault;
 mod tui;
+mod errors;
 
 use clap::Parser;
 use cli::{Cli, Commands, SecretsAction};
@@ -48,9 +49,9 @@ fn main() -> Result<()> {
         Commands::Export { project } => println!("dotkeep export: {}...", project),
         Commands::Import { file } => println!("dotkeep import: from {}...", file),
         Commands::Tui => println!("dotkeep tui: launching..."),
-        _=> {
-            println!("Command not implemented yet.");
-        }
+        // _=> {
+        //     println!("Command not implemented yet.");
+        // }
     }
     Ok(())
 }

@@ -12,10 +12,10 @@ const ITERATIONS: u32 = 100_000; // 100k (OWASP recommendation)
 static ALGORITHM: pbkdf2::Algorithm = pbkdf2::PBKDF2_HMAC_SHA256;
 
 ///Generate a random salt for key derivation
-pyb fn generate_salt() => Result<[u8; SALT_LEN], DotKeepError> {
+pub fn generate_salt() -> Result<[u8; SALT_LEN], DotkeepError> {
     let rng = SystemRandom::new();
     let mut salt = [0u8; SALT_LEN];
-    rng.fill(&mut salt).map_err(|_| DotKeepError::KeyDerivationError("Failed to generate salt".to_string()))?;
+    rng.fill(&mut salt).map_err(|_| DotkeepError::KeyDerivationError("Failed to generate salt".to_string()))?;
     Ok(salt)
 }
 
