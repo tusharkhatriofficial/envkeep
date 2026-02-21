@@ -18,6 +18,8 @@ fn main() -> Result<()> {
         Commands::Add { name } => cli::add::handle_add(&name)?,
         Commands::AddAuto => cli::add_auto::handle_add_auto()?,
         Commands::List => cli::list::handle_list()?,
+        Commands::Use { project } => cli::use_project::handle_use(&project)?,
+        Commands::Remove { name } => cli::remove::handle_remove(&name)?,
 
         // placeholder commands for now - will implement later
         Commands::Migrate => println!("dotkeep migrate: upgrading schema..."),
@@ -26,12 +28,12 @@ fn main() -> Result<()> {
         // Commands::Add { name } => println!("dotkeep add: scanning .env for {}...", name),
         // Commands::AddAuto => println!("dotkeep add-auto: detecting project..."),
         // Commands::List => println!("dotkeep list: showing all projects..."),
-        Commands::Remove { name } => println!("dotkeep remove: deleting {}...", name),
+        // Commands::Remove { name } => println!("dotkeep remove: deleting {}...", name),
         Commands::Inspect { name } => println!("dotkeep inspect: showing {}...", name),
         Commands::Diff { project1, project2 } => {
             println!("dotkeep diff: comparing {} vs {}...", project1, project2);
         }
-        Commands::Use { project } => println!("dotkeep use: writing .env for {}...", project),
+        // Commands::Use { project } => println!("dotkeep use: writing .env for {}...", project),
         Commands::Status => println!("dotkeep status: showing active project..."),
         Commands::Recent => println!("dotkeep recent: showing recent projects..."),
         Commands::Search { key } => println!("dotkeep search: finding {}...", key),
