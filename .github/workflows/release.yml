@@ -23,10 +23,10 @@ jobs:
           - os: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             archive: tar.gz
-          - os: macos-13           # Intel runner — native x86_64, no cross-compilation
+          - os: macos-latest       # ARM runner, cross-compiles to x86_64 via LLVM
             target: x86_64-apple-darwin
             archive: tar.gz
-          - os: macos-latest       # Apple Silicon runner — native aarch64
+          - os: macos-latest       # ARM runner, native aarch64
             target: aarch64-apple-darwin
             archive: tar.gz
           - os: windows-latest
