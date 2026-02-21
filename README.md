@@ -32,6 +32,15 @@ Every value is encrypted with AES-256-GCM, stored in an encrypted SQLCipher data
 
 ---
 
+## Quick Install 
+### macOS/Linux
+
+`curl -fsSL https://raw.githubusercontent.com/tusharkhatriofficial/dotkeep/main/install.sh | bash`
+
+### Windows PowerShell
+  
+`irm https://raw.githubusercontent.com/tusharkhatriofficial/dotkeep/main/install.ps1 | iex`
+
 ## What it looks like
 
 ```
@@ -77,7 +86,7 @@ $ dotkeep use my-saas
 
 ## Status
 
-**dotkeep is under active development and has not been released yet.**
+**dotkeep is under active development (v0.2.0-alpha released).**
 
 To try it now, build from source:
 
