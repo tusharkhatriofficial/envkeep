@@ -3,6 +3,12 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build (e.g. v0.2.0)"
+        required: true
+        default: "v0.2.0"
 
 permissions:
   contents: write
