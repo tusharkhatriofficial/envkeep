@@ -17,7 +17,15 @@ esac
 
 URL="https://github.com/$REPO/releases/download/$LATEST/dotkeep-$TARGET.tar.gz"
 echo "Downloading dotkeep $LATEST for $TARGET..."
+curl -sL "$URL" | tar xz -C /tmp/
+chmod +x /tmp/dotkeep
 
-curl -sL "$URL" | tar xz -C /usr/local/bin/
-echo "Installed dotkeep to /usr/local/bin/dotkeep"
-dotkeep --version
+DEST="/usr/local/bin/dotkeep"
+if [ -w "$(dirname $DEST)" ]; then
+  mv /tmp/dotkeep "$DEST"
+else
+  sudo mv /tmp/dotkeep "$DEST"
+fi
+
+echo "Installed dotkeep to $DEST"
+dotkeep --help
