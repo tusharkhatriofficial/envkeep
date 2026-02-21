@@ -166,3 +166,7 @@ fn run_migrations(conn: &Connection) -> Result<(), DotkeepError> {
 
     Ok(())
 }
+
+
+pub use project::Project;
+pub use variable::Variable;
