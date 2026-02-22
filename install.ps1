@@ -1,11 +1,11 @@
-# dotkeep Windows installer
+# envkeep Windows installer
 # Run this in PowerShell (not CMD):
-#   irm https://raw.githubusercontent.com/tusharkhatriofficial/dotkeep/main/install.ps1 | iex
+#   irm https://raw.githubusercontent.com/tusharkhatriofficial/envkeep/main/install.ps1 | iex
 
 $ErrorActionPreference = "Stop"
-$Repo = "tusharkhatriofficial/dotkeep"
+$Repo = "tusharkhatriofficial/envkeep"
 
-Write-Host "Fetching latest dotkeep release..."
+Write-Host "Fetching latest envkeep release..."
 $Release = Invoke-RestMethod "https://api.github.com/repos/$Repo/releases/latest"
 $Tag = $Release.tag_name
 $Asset = $Release.assets | Where-Object { $_.name -like "*windows*msvc*.zip" } | Select-Object -First 1
@@ -15,11 +15,11 @@ if (-not $Asset) {
     exit 1
 }
 
-$ZipPath = "$env:TEMP\dotkeep.zip"
+$ZipPath = "$env:TEMP\envkeep.zip"
 $InstDir = "$env:USERPROFILE\.local\bin"
-$ExePath = "$InstDir\dotkeep.exe"
+$ExePath = "$InstDir\envkeep.exe"
 
-Write-Host "Downloading dotkeep $Tag for Windows..."
+Write-Host "Downloading envkeep $Tag for Windows..."
 Invoke-WebRequest -Uri $Asset.browser_download_url -OutFile $ZipPath -UseBasicParsing
 
 New-Item -ItemType Directory -Force -Path $InstDir | Out-Null
@@ -31,13 +31,13 @@ $CurrentPath = [Environment]::GetEnvironmentVariable("Path", "User")
 if ($CurrentPath -notlike "*$InstDir*") {
     [Environment]::SetEnvironmentVariable("Path", "$CurrentPath;$InstDir", "User")
     Write-Host ""
-    Write-Host "dotkeep $Tag installed to $ExePath"
+    Write-Host "envkeep $Tag installed to $ExePath"
     Write-Host ""
     Write-Host "PATH updated. Close and reopen your terminal, then run:"
-    Write-Host "  dotkeep --help"
+    Write-Host "  envkeep --help"
 } else {
     Write-Host ""
-    Write-Host "dotkeep $Tag installed to $ExePath"
+    Write-Host "envkeep $Tag installed to $ExePath"
     Write-Host ""
     & $ExePath --help
 }

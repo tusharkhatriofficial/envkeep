@@ -2,7 +2,7 @@ use rusqlite::{params, Connection};
 use chrono::Utc;
 use uuid::Uuid;
 
-use crate::errors::DotkeepError;
+use crate::errors::EnvkeepError;
 
 #[derive(Debug, Clone)]
 pub struct Project {
@@ -29,7 +29,7 @@ impl Project {
 }
 
 /// Insert a new project into the vault.
-pub fn create_project(conn: &Connection, project: &Project) -> Result<(), DotkeepError> {
+pub fn create_project(conn: &Connection, project: &Project) -> Result<(), EnvkeepError> {
     conn.execute(
         "INSERT INTO projects (id, name, directory, created_at, updated_at, last_used_at)
          VALUES (?1, ?2, ?3, ?4, ?5, ?6)",
@@ -44,16 +44,16 @@ pub fn create_project(conn: &Connection, project: &Project) -> Result<(), Dotkee
     )
     .map_err(|e| {
         if e.to_string().contains("UNIQUE constraint failed") {
-            DotkeepError::ProjectAlreadyExists(project.name.clone())
+            EnvkeepError::ProjectAlreadyExists(project.name.clone())
         } else {
-            DotkeepError::DatabaseError(e)
+            EnvkeepError::DatabaseError(e)
         }
     })?;
     Ok(())
 }
 
 /// Get a project by name.
-pub fn get_project(conn: &Connection, name: &str) -> Result<Project, DotkeepError> {
+pub fn get_project(conn: &Connection, name: &str) -> Result<Project, EnvkeepError> {
     conn.query_row(
         "SELECT id, name, directory, created_at, updated_at, last_used_at
          FROM projects WHERE name = ?1",
@@ -69,11 +69,11 @@ pub fn get_project(conn: &Connection, name: &str) -> Result<Project, DotkeepErro
             })
         },
     )
-    .map_err(|_| DotkeepError::ProjectNotFound(name.to_string()))
+    .map_err(|_| EnvkeepError::ProjectNotFound(name.to_string()))
 }
 
 /// List all projects, ordered by last used (most recent first).
-pub fn list_projects(conn: &Connection) -> Result<Vec<Project>, DotkeepError> {
+pub fn list_projects(conn: &Connection) -> Result<Vec<Project>, EnvkeepError> {
     let mut stmt = conn.prepare(
         "SELECT id, name, directory, created_at, updated_at, last_used_at
          FROM projects ORDER BY COALESCE(last_used_at, updated_at) DESC",
@@ -96,7 +96,7 @@ pub fn list_projects(conn: &Connection) -> Result<Vec<Project>, DotkeepError> {
 }
 
 /// Delete a project and all its variables (CASCADE).
-pub fn delete_project(conn: &Connection, name: &str) -> Result<(), DotkeepError> {
+pub fn delete_project(conn: &Connection, name: &str) -> Result<(), EnvkeepError> {
     let project = get_project(conn, name)?;
 
     conn.execute("DELETE FROM variables WHERE project_id = ?1", [&project.id])?;
@@ -107,7 +107,7 @@ pub fn delete_project(conn: &Connection, name: &str) -> Result<(), DotkeepError>
 }
 
 /// Update the last_used_at timestamp for a project.
-pub fn touch_project(conn: &Connection, name: &str) -> Result<(), DotkeepError> {
+pub fn touch_project(conn: &Connection, name: &str) -> Result<(), EnvkeepError> {
     let now = Utc::now().to_rfc3339();
     let rows = conn.execute(
         "UPDATE projects SET last_used_at = ?1, updated_at = ?1 WHERE name = ?2",
@@ -115,14 +115,14 @@ pub fn touch_project(conn: &Connection, name: &str) -> Result<(), DotkeepError> 
     )?;
 
     if rows == 0 {
-        return Err(DotkeepError::ProjectNotFound(name.to_string()));
+        return Err(EnvkeepError::ProjectNotFound(name.to_string()));
     }
 
     Ok(())
 }
 
 /// Count the number of variables in a project.
-pub fn count_variables(conn: &Connection, project_id: &str) -> Result<u32, DotkeepError> {
+pub fn count_variables(conn: &Connection, project_id: &str) -> Result<u32, EnvkeepError> {
     let count: u32 = conn.query_row(
         "SELECT COUNT(*) FROM variables WHERE project_id = ?1",
         [project_id],

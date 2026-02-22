@@ -8,10 +8,10 @@ use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
 #[command(
-    name = "dotkeep",
+    name = "envkeep",
     version,
     about = "Keep your .env files safe. Local. Encrypted. Simple.",
-    long_about = "dotkeep is a local-first, encrypted CLI + TUI for managing .env \
+    long_about = "envkeep is a local-first, encrypted CLI + TUI for managing .env \
                   files across all your projects. No cloud. No accounts."
 )]
 

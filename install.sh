@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-REPO="tusharkhatriofficial/dotkeep"
+REPO="tusharkhatriofficial/envkeep"
 LATEST=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
   | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
 
@@ -15,17 +15,17 @@ case "$OS-$ARCH" in
   *) echo "Unsupported: $OS-$ARCH"; exit 1 ;;
 esac
 
-URL="https://github.com/$REPO/releases/download/$LATEST/dotkeep-$TARGET.tar.gz"
-echo "Downloading dotkeep $LATEST for $TARGET..."
+URL="https://github.com/$REPO/releases/download/$LATEST/envkeep-$TARGET.tar.gz"
+echo "Downloading envkeep $LATEST for $TARGET..."
 curl -sL "$URL" | tar xz -C /tmp/
-chmod +x /tmp/dotkeep
+chmod +x /tmp/envkeep
 
-DEST="/usr/local/bin/dotkeep"
+DEST="/usr/local/bin/envkeep"
 if [ -w "$(dirname $DEST)" ]; then
-  mv /tmp/dotkeep "$DEST"
+  mv /tmp/envkeep "$DEST"
 else
-  sudo mv /tmp/dotkeep "$DEST"
+  sudo mv /tmp/envkeep "$DEST"
 fi
 
-echo "Installed dotkeep to $DEST"
-dotkeep --help
+echo "Installed envkeep to $DEST"
+envkeep --help

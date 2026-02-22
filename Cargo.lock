@@ -380,7 +380,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "dotkeep"
+name = "either"
+version = "1.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
+
+[[package]]
+name = "envkeep"
 version = "0.2.0"
 dependencies = [
  "anyhow",
@@ -402,12 +408,6 @@ dependencies = [
  "thiserror",
  "uuid",
 ]
-
-[[package]]
-name = "either"
-version = "1.15.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
 
 [[package]]
 name = "equivalent"

@@ -15,12 +15,12 @@ pub fn handle_list() -> Result<()> {
 
     if projects.is_empty() {
         println!("No projects in vault.");
-        println!("  Run {} in a project directory.", "dotkeep add <name>".cyan());
+        println!("  Run {} in a project directory.", "envkeep add <name>".cyan());
         return Ok(());
     }
 
     println!(
-        "{} dotkeep projects ({})",
+        "{} envkeep projects ({})",
         "".bold(),  // or use an ascii icon
         projects.len()
     );

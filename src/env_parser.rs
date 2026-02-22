@@ -2,7 +2,7 @@ use std::collections::BTreeMap;
 use std::fs;
 use std::path::Path;
 
-use crate::errors::DotkeepError;
+use crate::errors::EnvkeepError;
 
 /// Parse a .env file into key-value pairs.
 ///
@@ -13,9 +13,9 @@ use crate::errors::DotkeepError;
 /// - # comments (ignored)
 /// - Empty lines (ignored)
 /// - Inline comments after values
-pub fn parse_env_file(path: &Path) -> Result<BTreeMap<String, String>, DotkeepError> {
+pub fn parse_env_file(path: &Path) -> Result<BTreeMap<String, String>, EnvkeepError> {
     let contents = fs::read_to_string(path)
-        .map_err(|e| DotkeepError::FileReadError(path.display().to_string(), e))?;
+        .map_err(|e| EnvkeepError::FileReadError(path.display().to_string(), e))?;
 
     let mut vars = BTreeMap::new();
 
@@ -58,7 +58,7 @@ pub fn parse_env_file(path: &Path) -> Result<BTreeMap<String, String>, DotkeepEr
 pub fn write_env_file(
     path: &Path,
     vars: &BTreeMap<String, String>,
-) -> Result<(), DotkeepError> {
+) -> Result<(), EnvkeepError> {
     let mut content = String::new();
 
     for (key, value) in vars {
@@ -71,7 +71,7 @@ pub fn write_env_file(
     }
 
     fs::write(path, content)
-        .map_err(|e| DotkeepError::FileWriteError(path.display().to_string(), e))?;
+        .map_err(|e| EnvkeepError::FileWriteError(path.display().to_string(), e))?;
 
     Ok(())
 }

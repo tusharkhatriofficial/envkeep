@@ -4,17 +4,17 @@ pub mod variable;
 use rusqlite::Connection;
 use std::path::PathBuf;
 
-use crate::errors::DotkeepError;
+use crate::errors::EnvkeepError;
 use crate::crypto::key::generate_salt;
 
-///Get the path to dotkeep data directory
+///Get the path to envkeep data directory
 pub fn data_dir() -> PathBuf {
     let mut path = dirs::home_dir().expect("Could not find home directory");
-    path.push(".dotkeep");
+    path.push(".envkeep");
     path
 }
 
-///Get the path to the vault database (~/.dotkeep/vault.db)
+///Get the path to the vault database (~/.envkeep/vault.db)
 pub fn vault_path() -> PathBuf {
     let mut path = data_dir();
     path.push("vault.db");
@@ -29,11 +29,11 @@ pub fn vault_exists() -> bool {
 ///open the vault database with the master password
 ///
 /// This sets the SQLCipher encryption ket and returns a connection.
-pub fn open_vault(password: &str) -> Result<Connection, DotkeepError>{
+pub fn open_vault(password: &str) -> Result<Connection, EnvkeepError>{
     let path = vault_path();
 
     if !path.exists() {
-        return Err(DotkeepError::VaultNotFound);
+        return Err(EnvkeepError::VaultNotFound);
     }
 
     let conn = Connection::open(&path)?;
@@ -43,26 +43,26 @@ pub fn open_vault(password: &str) -> Result<Connection, DotkeepError>{
 
     //Test that the key is correct by querying the schema
     conn.execute_batch("SELECT count(*) FROM sqlite_master;")
-        .map_err(|_| DotkeepError::WrongPassword)?;
+        .map_err(|_| EnvkeepError::WrongPassword)?;
 
     Ok(conn)
 }
 
 
 ///create a new vault database with the master password
-pub fn create_vault(password: &str) -> Result<Connection, DotkeepError> {
+pub fn create_vault(password: &str) -> Result<Connection, EnvkeepError> {
     let dir = data_dir();
     let path = vault_path();
 
     if path.exists() {
-        return Err(DotkeepError::VaultAlreadyExists(
+        return Err(EnvkeepError::VaultAlreadyExists(
             path.display().to_string(),
         ));
     }
 
     //create the dir if it does not exists
     std::fs::create_dir_all(&dir)
-        .map_err(|e| DotkeepError::FileWriteError(dir.display().to_string(), e))?;
+        .map_err(|e| EnvkeepError::FileWriteError(dir.display().to_string(), e))?;
 
     let conn = Connection::open(&path)?;
 
@@ -92,7 +92,7 @@ pub fn create_vault(password: &str) -> Result<Connection, DotkeepError> {
 }
 
 /// Get the encryption key by reading the salt from the database and deriving the key.
-pub fn get_encryption_key(conn: &Connection, password: &str) -> Result<[u8; 32], DotkeepError> {
+pub fn get_encryption_key(conn: &Connection, password: &str) -> Result<[u8; 32], EnvkeepError> {
     let salt_hex: String = conn.query_row(
         "SELECT value FROM metadata WHERE key = 'salt'",
         [],
@@ -109,7 +109,7 @@ pub fn get_encryption_key(conn: &Connection, password: &str) -> Result<[u8; 32],
 
 
 ///run all the database migrations
-fn run_migrations(conn: &Connection) -> Result<(), DotkeepError> {
+fn run_migrations(conn: &Connection) -> Result<(), EnvkeepError> {
     conn.execute_batch(
         "
         -- Metadata table for vault configuration

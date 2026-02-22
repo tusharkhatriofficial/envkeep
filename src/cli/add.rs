@@ -20,7 +20,7 @@ pub fn handle_add(name: &str) -> Result<()> {
     let env_path = cwd.join(".env");
 
     if !env_path.exists() {
-        return Err(crate::errors::DotkeepError::NoEnvFile.into());
+        return Err(crate::errors::EnvkeepError::NoEnvFile.into());
     }
 
     // Parse the .env file

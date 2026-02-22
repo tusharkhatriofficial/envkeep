@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">dotkeep</h1>
+  <h1 align="center">envkeep</h1>
   <p align="center">
     <strong>Your .env files, encrypted locally. No accounts. No cloud. Just works.</strong>
   </p>
@@ -16,16 +16,16 @@
 
 You have 12 projects on your machine. Each has a `.env` file. Half the secrets are copy-pasted between them. You cannot search across them. You cannot diff them. You cannot back them up. One bad `rm -rf` and they are gone.
 
-**dotkeep fixes this in 30 seconds:**
+**envkeep fixes this in 30 seconds:**
 
 ```bash
-dotkeep init                                 # set a master password
-cd ~/code/my-saas && dotkeep add my-saas     # encrypt and store .env
-cd ~/code/api && dotkeep add api             # again
-cd ~/code/landing && dotkeep add landing     # and again
+envkeep init                                 # set a master password
+cd ~/code/my-saas && envkeep add my-saas     # encrypt and store .env
+cd ~/code/api && envkeep add api             # again
+cd ~/code/landing && envkeep add landing     # and again
 
 # later, new laptop, whatever:
-dotkeep use my-saas                          # .env restored
+envkeep use my-saas                          # .env restored
 ```
 
 Every value is encrypted with AES-256-GCM, stored in an encrypted SQLCipher database, and unlocked with a single master password.
@@ -35,18 +35,18 @@ Every value is encrypted with AES-256-GCM, stored in an encrypted SQLCipher data
 ## Quick Install 
 ### macOS/Linux
 
-`curl -fsSL https://raw.githubusercontent.com/tusharkhatriofficial/dotkeep/main/install.sh | bash`
+`curl -fsSL https://raw.githubusercontent.com/tusharkhatriofficial/envkeep/main/install.sh | bash`
 
 ### Windows PowerShell
   
-`irm https://raw.githubusercontent.com/tusharkhatriofficial/dotkeep/main/install.ps1 | iex`
+`irm https://raw.githubusercontent.com/tusharkhatriofficial/envkeep/main/install.ps1 | iex`
 
 ## What it looks like
 
 ```
-$ dotkeep list
+$ envkeep list
 
-  dotkeep projects (4)
+  envkeep projects (4)
 
 ┌─────────────────┬──────┬──────────┐
 │ Project         │ Vars │ Modified │
@@ -57,14 +57,14 @@ $ dotkeep list
 │ worker          │ 8    │ 2d ago   │
 └─────────────────┴──────┴──────────┘
 
-$ dotkeep search DATABASE_URL
+$ envkeep search DATABASE_URL
 
   Found DATABASE_URL in 3 projects:
   |-- my-saas: postgresql://localhost/saas_dev
   |-- api: postgresql://localhost/api_dev
   |-- worker: postgresql://localhost/worker_dev
 
-$ dotkeep inspect my-saas
+$ envkeep inspect my-saas
 
   Project: my-saas (28 variables)
 
@@ -78,7 +78,7 @@ $ dotkeep inspect my-saas
 │ DEBUG            │ true                         │
 └──────────────────┴──────────────────────────────┘
 
-$ dotkeep use my-saas
+$ envkeep use my-saas
   Wrote 28 variables to .env
 ```
 
@@ -86,15 +86,15 @@ $ dotkeep use my-saas
 
 ## Status
 
-**dotkeep is under active development (v0.2.0-alpha released).**
+**envkeep is under active development (v0.2.0-alpha released).**
 
 To try it now, build from source:
 
 ```bash
-git clone https://github.com/tusharkhatriofficial/dotkeep.git
-cd dotkeep
+git clone https://github.com/tusharkhatriofficial/envkeep.git
+cd envkeep
 cargo build --release
-./target/release/dotkeep --help
+./target/release/envkeep --help
 ```
 
 Requires Rust 1.70+ and a C compiler (for SQLCipher). Pre-built binaries and `cargo install` will be available at first stable release.
@@ -105,24 +105,24 @@ Requires Rust 1.70+ and a C compiler (for SQLCipher). Pre-built binaries and `ca
 
 **1. Create your vault**
 ```
-$ dotkeep init
+$ envkeep init
   Creating a new vault. Choose a master password.
   Enter master password: --------
   Confirm master password: --------
-  Vault created at ~/.dotkeep/vault.db
+  Vault created at ~/.envkeep/vault.db
 ```
 
 **2. Store a project**
 ```
 $ cd ~/code/my-saas
-$ dotkeep add my-saas
+$ envkeep add my-saas
   Added project my-saas with 28 variables
 ```
 
 **3. Restore it anywhere**
 ```
 $ cd ~/code/my-saas
-$ dotkeep use my-saas
+$ envkeep use my-saas
   Wrote 28 variables to .env
 ```
 
@@ -134,53 +134,53 @@ $ dotkeep use my-saas
 
 | Command | Description |
 |---|---|
-| `dotkeep init` | Create encrypted vault, set master password |
-| `dotkeep add <name>` | Read `.env` from current directory, encrypt, store |
-| `dotkeep use <name>` | Write decrypted `.env` to current directory |
-| `dotkeep list` | List all projects |
-| `dotkeep remove <name>` | Delete a project from the vault |
+| `envkeep init` | Create encrypted vault, set master password |
+| `envkeep add <name>` | Read `.env` from current directory, encrypt, store |
+| `envkeep use <name>` | Write decrypted `.env` to current directory |
+| `envkeep list` | List all projects |
+| `envkeep remove <name>` | Delete a project from the vault |
 
 ### Inspect and compare
 
 | Command | Description |
 |---|---|
-| `dotkeep inspect <name>` | Show variables with secrets masked |
-| `dotkeep diff <a> <b>` | Compare variables between two projects |
-| `dotkeep search <key>` | Find which projects use a given key |
-| `dotkeep unused <name>` | Find variables not referenced in source code |
-| `dotkeep validate <name>` | Check for common mistakes (bad ports, malformed URLs) |
-| `dotkeep types <name>` | Infer variable types (string, number, boolean, URL) |
+| `envkeep inspect <name>` | Show variables with secrets masked |
+| `envkeep diff <a> <b>` | Compare variables between two projects |
+| `envkeep search <key>` | Find which projects use a given key |
+| `envkeep unused <name>` | Find variables not referenced in source code |
+| `envkeep validate <name>` | Check for common mistakes (bad ports, malformed URLs) |
+| `envkeep types <name>` | Infer variable types (string, number, boolean, URL) |
 
 ### Secrets and sharing
 
 | Command | Description |
 |---|---|
-| `dotkeep secrets set KEY=VALUE` | Store an encrypted shared secret |
-| `dotkeep secrets list` | List all secrets (values masked) |
-| `dotkeep secrets link <key> <project>` | Link a shared secret to a project |
-| `dotkeep sync <from> <to>` | Copy common variables between projects |
-| `dotkeep export <name>` | Export project as encrypted `.envvault` file |
-| `dotkeep import <file>` | Import from `.envvault` file |
+| `envkeep secrets set KEY=VALUE` | Store an encrypted shared secret |
+| `envkeep secrets list` | List all secrets (values masked) |
+| `envkeep secrets link <key> <project>` | Link a shared secret to a project |
+| `envkeep sync <from> <to>` | Copy common variables between projects |
+| `envkeep export <name>` | Export project as encrypted `.envvault` file |
+| `envkeep import <file>` | Import from `.envvault` file |
 
 ### Backup and ops
 
 | Command | Description |
 |---|---|
-| `dotkeep backup` | Full vault backup (encrypted) |
-| `dotkeep restore <file>` | Restore vault from backup |
-| `dotkeep status` | Show active project |
-| `dotkeep recent` | Switch to recently used project |
+| `envkeep backup` | Full vault backup (encrypted) |
+| `envkeep restore <file>` | Restore vault from backup |
+| `envkeep status` | Show active project |
+| `envkeep recent` | Switch to recently used project |
 
 ### Terminal UI
 
 ```
-$ dotkeep tui
+$ envkeep tui
 ```
 
 Full-screen terminal interface. Navigate projects, edit variables, search across the vault.
 
 ```
-+-  dotkeep  -----------------------------------+
++-  envkeep  -----------------------------------+
 |  Projects (4)                                  |
 |                                                |
 |  > my-saas       28 vars    2h ago             |
@@ -209,15 +209,15 @@ Every developer has this problem:
 
 No search. No diff. No backup. Just scattered plaintext files with production credentials in them.
 
-dotkeep replaces all of that with one encrypted file:
+envkeep replaces all of that with one encrypted file:
 
 ```
-~/.dotkeep/vault.db
+~/.envkeep/vault.db
 ```
 
 ### Comparison
 
-| | dotkeep | Doppler | Infisical | direnv |
+| | envkeep | Doppler | Infisical | direnv |
 |---|---|---|---|---|
 | Cost | Free | $20+/mo | $10+/mo | Free |
 | Storage | Local | Cloud | Cloud | .envrc files |
@@ -254,13 +254,13 @@ Master Password
 ## How it works
 
 ```
-dotkeep add my-saas:
+envkeep add my-saas:
   1. Read .env from current directory
   2. Parse KEY=VALUE pairs (handles quotes, comments, inline comments)
   3. Encrypt each value individually with AES-256-GCM
-  4. Store in ~/.dotkeep/vault.db (SQLCipher-encrypted database)
+  4. Store in ~/.envkeep/vault.db (SQLCipher-encrypted database)
 
-dotkeep use my-saas:
+envkeep use my-saas:
   1. Unlock vault with master password
   2. Decrypt each variable
   3. Write .env to current directory
@@ -283,8 +283,8 @@ dotkeep use my-saas:
 ## Contributing
 
 ```bash
-git clone https://github.com/tusharkhatriofficial/dotkeep.git
-cd dotkeep
+git clone https://github.com/tusharkhatriofficial/envkeep.git
+cd envkeep
 cargo build
 cargo test
 cargo run -- init

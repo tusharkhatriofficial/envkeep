@@ -13,11 +13,11 @@ pub fn handle_init() -> Result<()> {
             "Error:".red().bold(),
             path.display()
         );
-        println!("  Run {} to open the existing vault.", "dotkeep list".cyan());
+        println!("  Run {} to open the existing vault.", "envkeep list".cyan());
         return Ok(());
     }
 
-    println!("{}", "dotkeep -- Keep your .env files safe".bold());
+    println!("{}", "envkeep -- Keep your .env files safe".bold());
     println!();
     println!("Creating a new vault. Choose a master password.");
     println!("This password encrypts all your secrets. {}", "Do not forget it.".yellow().bold());
@@ -37,7 +37,7 @@ pub fn handle_init() -> Result<()> {
     println!();
     println!("Next steps:");
     println!("  1. cd into a project directory");
-    println!("  2. Run {} to store its .env file", "dotkeep add <name>".cyan());
+    println!("  2. Run {} to store its .env file", "envkeep add <name>".cyan());
 
     Ok(())
 }

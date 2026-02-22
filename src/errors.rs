@@ -1,9 +1,9 @@
 use thiserror::Error;
 
 #[derive(Error, Debug)]
-pub enum DotkeepError {
+pub enum EnvkeepError {
     // Vault errors
-    #[error("Vault not found. Run 'dotkeep init' first.")]
+    #[error("Vault not found. Run 'envkeep init' first.")]
     VaultNotFound,
 
     #[error("Vault already exists at {0}")]

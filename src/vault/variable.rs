@@ -2,7 +2,7 @@ use rusqlite::{params, Connection};
 use chrono::Utc;
 use uuid::Uuid;
 
-use crate::errors::DotkeepError;
+use crate::errors::EnvkeepError;
 
 #[derive(Debug, Clone)]
 pub struct Variable {
@@ -20,7 +20,7 @@ pub fn upsert_variable(
     project_id: &str,
     key: &str,
     encrypted_value: &str,
-) -> Result<(), DotkeepError> {
+) -> Result<(), EnvkeepError> {
     let now = Utc::now().to_rfc3339();
     let id = Uuid::new_v4().to_string();
 
@@ -40,7 +40,7 @@ pub fn upsert_variable(
 pub fn get_variables(
     conn: &Connection,
     project_id: &str,
-) -> Result<Vec<Variable>, DotkeepError> {
+) -> Result<Vec<Variable>, EnvkeepError> {
     let mut stmt = conn.prepare(
         "SELECT id, project_id, key, encrypted_value, created_at, updated_at
          FROM variables WHERE project_id = ?1 ORDER BY key",
@@ -67,7 +67,7 @@ pub fn get_variable(
     conn: &Connection,
     project_id: &str,
     key: &str,
-) -> Result<Variable, DotkeepError> {
+) -> Result<Variable, EnvkeepError> {
     conn.query_row(
         "SELECT id, project_id, key, encrypted_value, created_at, updated_at
          FROM variables WHERE project_id = ?1 AND key = ?2",
@@ -83,7 +83,7 @@ pub fn get_variable(
             })
         },
     )
-    .map_err(|_| DotkeepError::SecretNotFound(format!("{}:{}", project_id, key)))
+    .map_err(|_| EnvkeepError::SecretNotFound(format!("{}:{}", project_id, key)))
 }
 
 /// Delete a variable.
@@ -91,7 +91,7 @@ pub fn delete_variable(
     conn: &Connection,
     project_id: &str,
     key: &str,
-) -> Result<(), DotkeepError> {
+) -> Result<(), EnvkeepError> {
     conn.execute(
         "DELETE FROM variables WHERE project_id = ?1 AND key = ?2",
         params![project_id, key],
@@ -103,7 +103,7 @@ pub fn delete_variable(
 pub fn search_key(
     conn: &Connection,
     key: &str,
-) -> Result<Vec<(String, String)>, DotkeepError> {
+) -> Result<Vec<(String, String)>, EnvkeepError> {
     let mut stmt = conn.prepare(
         "SELECT p.name, v.encrypted_value
          FROM variables v

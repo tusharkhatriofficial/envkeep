@@ -1,11 +1,11 @@
 [package]
-name = "dotkeep"
+name = "envkeep"
 version = "0.2.0"
 edition = "2024"
 authors = ["Tushar Khatri <hello@tusharkhatri.in>"]
 description = "Local .env manager. Encrypted. No cloud."
 license = "MIT"
-repository = "https://github.com/tusharkhatriofficial/dotkeep"
+repository = "https://github.com/tusharkhatriofficial/envkeep"
 keywords = ["env", "dotenv", "encryption", "cli", "secrets"]
 categories = ["command-line-utilities", "cryptography"]
 
@@ -34,7 +34,7 @@ thiserror = "1.0"
 # Utilities
 uuid = { version = "1.10", features = ["v4"] }
 chrono = { version = "0.4", features = ["serde"] }
-dirs = "5.0"            # Platform-specific directories (~/.dotkeep)
+dirs = "5.0"            # Platform-specific directories (~/.envkeep)
 rpassword = "7.3"       # Secure password input (no echo)
 comfy-table = "7.1"     # Pretty table output
 colored = "2.1"         # Colored terminal output

@@ -3,7 +3,7 @@ use ring::pbkdf2;
 use ring::rand::{SystemRandom, SecureRandom};
 use std::num::NonZeroU32;
 
-use crate::errors::DotkeepError;
+use crate::errors::EnvkeepError;
 
 const CREDENTIAL_LEN: usize = 32; //AE 256 need 32 bytes
 const SALT_LEN: usize = 16; //128-bit salt
@@ -12,10 +12,10 @@ const ITERATIONS: u32 = 100_000; // 100k (OWASP recommendation)
 static ALGORITHM: pbkdf2::Algorithm = pbkdf2::PBKDF2_HMAC_SHA256;
 
 ///Generate a random salt for key derivation
-pub fn generate_salt() -> Result<[u8; SALT_LEN], DotkeepError> {
+pub fn generate_salt() -> Result<[u8; SALT_LEN], EnvkeepError> {
     let rng = SystemRandom::new();
     let mut salt = [0u8; SALT_LEN];
-    rng.fill(&mut salt).map_err(|_| DotkeepError::KeyDerivationError("Failed to generate salt".to_string()))?;
+    rng.fill(&mut salt).map_err(|_| EnvkeepError::KeyDerivationError("Failed to generate salt".to_string()))?;
     Ok(salt)
 }
 

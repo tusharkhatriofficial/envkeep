@@ -60,21 +60,21 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           cd target/${{ matrix.target }}/release
-          tar czf ../../../dotkeep-${{ matrix.target }}.tar.gz dotkeep
+          tar czf ../../../envkeep-${{ matrix.target }}.tar.gz envkeep
           cd ../../..
 
       - name: Package (Windows)
         if: runner.os == 'Windows'
         run: |
           cd target/${{ matrix.target }}/release
-          Compress-Archive dotkeep.exe ../../../dotkeep-${{ matrix.target }}.zip
+          Compress-Archive envkeep.exe ../../../envkeep-${{ matrix.target }}.zip
           cd ../../..
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dotkeep-${{ matrix.target }}
-          path: dotkeep-${{ matrix.target }}.*
+          name: envkeep-${{ matrix.target }}
+          path: envkeep-${{ matrix.target }}.*
 
   release:
     name: Create Release
