@@ -20,6 +20,8 @@ fn main() -> Result<()> {
         Commands::List => cli::list::handle_list()?,
         Commands::Use { project } => cli::use_project::handle_use(&project)?,
         Commands::Remove { name } => cli::remove::handle_remove(&name)?,
+        Commands::Inspect { name } => cli::inspect::handle_inspect(&name)?,
+        Commands::Diff { project1, project2 } => cli::diff::handle_diff(&project1, &project2)?,
 
         // placeholder commands for now - will implement later
         Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
@@ -29,10 +31,10 @@ fn main() -> Result<()> {
         // Commands::AddAuto => println!("envkeep add-auto: detecting project..."),
         // Commands::List => println!("envkeep list: showing all projects..."),
         // Commands::Remove { name } => println!("envkeep remove: deleting {}...", name),
-        Commands::Inspect { name } => println!("envkeep inspect: showing {}...", name),
-        Commands::Diff { project1, project2 } => {
-            println!("envkeep diff: comparing {} vs {}...", project1, project2);
-        }
+        // Commands::Inspect { name } => println!("envkeep inspect: showing {}...", name),
+        // Commands::Diff { project1, project2 } => {
+        //     println!("envkeep diff: comparing {} vs {}...", project1, project2);
+        // }
         // Commands::Use { project } => println!("envkeep use: writing .env for {}...", project),
         Commands::Status => println!("envkeep status: showing active project..."),
         Commands::Recent => println!("envkeep recent: showing recent projects..."),

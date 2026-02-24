@@ -4,6 +4,8 @@ pub mod add_auto;
 pub mod list;
 pub mod use_project;
 pub mod remove;
+pub mod inspect;
+pub mod diff;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
