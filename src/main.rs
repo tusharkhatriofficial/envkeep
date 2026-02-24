@@ -25,11 +25,10 @@ fn main() -> Result<()> {
         Commands::Search { key } => cli::search::handle_search(&key)?,
         Commands::Unused { project } => cli::unused::handle_unused(&project)?,
         Commands::Secrets { action } => cli::secrets::handle_secrets(action)?,
+        Commands::Validate { project } => cli::validate::handle_validate(&project)?,
+        Commands::Types { project } => cli::types::handle_types(&project)?,
 
         // placeholder commands for now - will implement later
-        Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
-        Commands::Backup => println!("envkeep backup: exporting vault..."),
-        Commands::Restore { file } => println!("envkeep restore: importing from {}...", file),
         // Commands::Add { name } => println!("envkeep add: scanning .env for {}...", name),
         // Commands::AddAuto => println!("envkeep add-auto: detecting project..."),
         // Commands::List => println!("envkeep list: showing all projects..."),
@@ -39,12 +38,11 @@ fn main() -> Result<()> {
         //     println!("envkeep diff: comparing {} vs {}...", project1, project2);
         // }
         // Commands::Use { project } => println!("envkeep use: writing .env for {}...", project),
-        Commands::Status => println!("envkeep status: showing active project..."),
-        Commands::Recent => println!("envkeep recent: showing recent projects..."),
+    
         // Commands::Search { key } => println!("envkeep search: finding {}...", key),
         // Commands::Unused { project } => println!("envkeep unused: checking {}...", project),
-        Commands::Validate { project } => println!("envkeep validate: checking {}...", project),
-        Commands::Types { project } => println!("envkeep types: inferring for {}...", project),
+        // Commands::Validate { project } => println!("envkeep validate: checking {}...", project),
+        // Commands::Types { project } => println!("envkeep types: inferring for {}...", project),
         // Commands::Secrets { action } => match action {
         //     SecretsAction::Set { pair } => println!("envkeep secrets set: {}...", pair),
         //     SecretsAction::List => println!("envkeep secrets list..."),
@@ -58,6 +56,11 @@ fn main() -> Result<()> {
         //         println!("envkeep secrets rotate: {}...", secret);
         //     }
         // },
+        Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
+        Commands::Backup => println!("envkeep backup: exporting vault..."),
+        Commands::Restore { file } => println!("envkeep restore: importing from {}...", file),
+        Commands::Status => println!("envkeep status: showing active project..."),
+        Commands::Recent => println!("envkeep recent: showing recent projects..."),
         Commands::Sync { from, to } => println!("envkeep sync: {} -> {}...", from, to),
         Commands::Generate { template } => println!("envkeep generate: from {}...", template),
         Commands::Export { project } => println!("envkeep export: {}...", project),
