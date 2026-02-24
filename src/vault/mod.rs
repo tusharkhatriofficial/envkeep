@@ -1,5 +1,6 @@
 pub mod project;
 pub mod variable;
+pub mod secret;
 
 use rusqlite::Connection;
 use std::path::PathBuf;

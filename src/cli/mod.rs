@@ -8,6 +8,7 @@ pub mod inspect;
 pub mod diff;
 pub mod search;
 pub mod unused;
+pub mod secrets;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]

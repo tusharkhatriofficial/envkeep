@@ -24,6 +24,7 @@ fn main() -> Result<()> {
         Commands::Diff { project1, project2 } => cli::diff::handle_diff(&project1, &project2)?,
         Commands::Search { key } => cli::search::handle_search(&key)?,
         Commands::Unused { project } => cli::unused::handle_unused(&project)?,
+        Commands::Secrets { action } => cli::secrets::handle_secrets(action)?,
 
         // placeholder commands for now - will implement later
         Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
@@ -44,19 +45,19 @@ fn main() -> Result<()> {
         // Commands::Unused { project } => println!("envkeep unused: checking {}...", project),
         Commands::Validate { project } => println!("envkeep validate: checking {}...", project),
         Commands::Types { project } => println!("envkeep types: inferring for {}...", project),
-        Commands::Secrets { action } => match action {
-            SecretsAction::Set { pair } => println!("envkeep secrets set: {}...", pair),
-            SecretsAction::List => println!("envkeep secrets list..."),
-            SecretsAction::Link { secret, project } => {
-                println!("envkeep secrets link: {} -> {}...", secret, project);
-            }
-            SecretsAction::Unlink { secret, project } => {
-                println!("envkeep secrets unlink: {} -> {}...", secret, project);
-            }
-            SecretsAction::Rotate { secret } => {
-                println!("envkeep secrets rotate: {}...", secret);
-            }
-        },
+        // Commands::Secrets { action } => match action {
+        //     SecretsAction::Set { pair } => println!("envkeep secrets set: {}...", pair),
+        //     SecretsAction::List => println!("envkeep secrets list..."),
+        //     SecretsAction::Link { secret, project } => {
+        //         println!("envkeep secrets link: {} -> {}...", secret, project);
+        //     }
+        //     SecretsAction::Unlink { secret, project } => {
+        //         println!("envkeep secrets unlink: {} -> {}...", secret, project);
+        //     }
+        //     SecretsAction::Rotate { secret } => {
+        //         println!("envkeep secrets rotate: {}...", secret);
+        //     }
+        // },
         Commands::Sync { from, to } => println!("envkeep sync: {} -> {}...", from, to),
         Commands::Generate { template } => println!("envkeep generate: from {}...", template),
         Commands::Export { project } => println!("envkeep export: {}...", project),
