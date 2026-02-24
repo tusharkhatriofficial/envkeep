@@ -6,7 +6,7 @@ $ErrorActionPreference = "Stop"
 $Repo = "tusharkhatriofficial/envkeep"
 
 Write-Host "Fetching latest envkeep release..."
-$Release = Invoke-RestMethod "https://api.github.com/repos/$Repo/releases/latest"
+$Release = (Invoke-RestMethod "https://api.github.com/repos/$Repo/releases") | Select-Object -First 1
 $Tag = $Release.tag_name
 $Asset = $Release.assets | Where-Object { $_.name -like "*windows*msvc*.zip" } | Select-Object -First 1
 
