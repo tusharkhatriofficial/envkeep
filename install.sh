@@ -2,8 +2,8 @@
 set -e
 
 REPO="tusharkhatriofficial/envkeep"
-LATEST=$(curl -s "https://api.github.com/repos/$REPO/releases/latest" \
-  | grep '"tag_name"' | sed -E 's/.*"([^"]+)".*/\1/')
+LATEST=$(curl -s "https://api.github.com/repos/$REPO/releases" \
+  | grep '"tag_name"' | head -1 | sed -E 's/.*"([^"]+)".*/\1/')
 
 OS=$(uname -s | tr '[:upper:]' '[:lower:]')
 ARCH=$(uname -m)

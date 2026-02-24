@@ -1,6 +1,6 @@
 [package]
 name = "envkeep"
-version = "0.2.0"
+version = "0.3.0-alpha"
 edition = "2024"
 authors = ["Tushar Khatri <hello@tusharkhatri.in>"]
 description = "Local .env manager. Encrypted. No cloud."
