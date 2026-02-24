@@ -22,6 +22,8 @@ fn main() -> Result<()> {
         Commands::Remove { name } => cli::remove::handle_remove(&name)?,
         Commands::Inspect { name } => cli::inspect::handle_inspect(&name)?,
         Commands::Diff { project1, project2 } => cli::diff::handle_diff(&project1, &project2)?,
+        Commands::Search { key } => cli::search::handle_search(&key)?,
+        Commands::Unused { project } => cli::unused::handle_unused(&project)?,
 
         // placeholder commands for now - will implement later
         Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
@@ -38,8 +40,8 @@ fn main() -> Result<()> {
         // Commands::Use { project } => println!("envkeep use: writing .env for {}...", project),
         Commands::Status => println!("envkeep status: showing active project..."),
         Commands::Recent => println!("envkeep recent: showing recent projects..."),
-        Commands::Search { key } => println!("envkeep search: finding {}...", key),
-        Commands::Unused { project } => println!("envkeep unused: checking {}...", project),
+        // Commands::Search { key } => println!("envkeep search: finding {}...", key),
+        // Commands::Unused { project } => println!("envkeep unused: checking {}...", project),
         Commands::Validate { project } => println!("envkeep validate: checking {}...", project),
         Commands::Types { project } => println!("envkeep types: inferring for {}...", project),
         Commands::Secrets { action } => match action {

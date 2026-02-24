@@ -6,6 +6,8 @@ pub mod use_project;
 pub mod remove;
 pub mod inspect;
 pub mod diff;
+pub mod search;
+pub mod unused;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
