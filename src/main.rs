@@ -27,7 +27,8 @@ fn main() -> Result<()> {
         Commands::Secrets { action } => cli::secrets::handle_secrets(action)?,
         Commands::Validate { project } => cli::validate::handle_validate(&project)?,
         Commands::Types { project } => cli::types::handle_types(&project)?,
-
+        Commands::Sync { from, to } => cli::sync::handle_sync(&from, &to)?,
+        Commands::Generate { template } => cli::generate::handle_generate(&template)?,
         // placeholder commands for now - will implement later
         // Commands::Add { name } => println!("envkeep add: scanning .env for {}...", name),
         // Commands::AddAuto => println!("envkeep add-auto: detecting project..."),
@@ -61,8 +62,8 @@ fn main() -> Result<()> {
         Commands::Restore { file } => println!("envkeep restore: importing from {}...", file),
         Commands::Status => println!("envkeep status: showing active project..."),
         Commands::Recent => println!("envkeep recent: showing recent projects..."),
-        Commands::Sync { from, to } => println!("envkeep sync: {} -> {}...", from, to),
-        Commands::Generate { template } => println!("envkeep generate: from {}...", template),
+        // Commands::Sync { from, to } => println!("envkeep sync: {} -> {}...", from, to),
+        // Commands::Generate { template } => println!("envkeep generate: from {}...", template),
         Commands::Export { project } => println!("envkeep export: {}...", project),
         Commands::Import { file } => println!("envkeep import: from {}...", file),
         Commands::Tui => println!("envkeep tui: launching..."),

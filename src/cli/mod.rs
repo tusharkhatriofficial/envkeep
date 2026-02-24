@@ -11,6 +11,8 @@ pub mod unused;
 pub mod secrets;
 pub mod validate;
 pub mod types;
+pub mod sync;
+pub mod generate;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
