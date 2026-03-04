@@ -77,7 +77,7 @@ pub fn handle_generate(template_path: &str) -> Result<()> {
         }
     } else {
         fs::read_to_string(path)
-            .map_err(|e| crate::errors::DotkeepError::FileReadError(
+            .map_err(|e| crate::errors::EnvkeepError::FileReadError(
                 template_path.to_string(), e
             ))?
     };

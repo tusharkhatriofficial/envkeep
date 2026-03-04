@@ -13,6 +13,8 @@ pub mod validate;
 pub mod types;
 pub mod sync;
 pub mod generate;
+pub mod export;
+pub mod import;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
