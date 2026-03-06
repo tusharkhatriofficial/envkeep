@@ -33,11 +33,9 @@ fn main() -> Result<()> {
         Commands::Import { file } => cli::import::handle_import(&file)?,
         Commands::Backup => cli::backup::handle_backup()?,
         Commands::Restore { file } => cli::restore::handle_restore(&file)?,
-
-        // placeholder commands for now - will implement later
-        Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
-        Commands::Status => println!("envkeep status: showing active project..."),
-        Commands::Recent => println!("envkeep recent: showing recent projects..."),
+        Commands::Status => cli::status::handle_status()?,
+        Commands::Recent => cli::recent::handle_recent()?,
+        Commands::Migrate => cli::migrate::handle_migrate()?,
         Commands::Tui => println!("envkeep tui: launching..."),
         // _=> {
         //     println!("Command not implemented yet.");

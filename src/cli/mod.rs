@@ -17,6 +17,9 @@ pub mod export;
 pub mod import;
 pub mod backup;
 pub mod restore;
+pub mod status;
+pub mod recent;
+pub mod migrate;
 use clap::{Parser, Subcommand};
 
 #[derive(Parser)]
