@@ -31,11 +31,11 @@ fn main() -> Result<()> {
         Commands::Generate { template } => cli::generate::handle_generate(&template)?,
         Commands::Export { project } => cli::export::handle_export(&project)?,
         Commands::Import { file } => cli::import::handle_import(&file)?,
+        Commands::Backup => cli::backup::handle_backup()?,
+        Commands::Restore { file } => cli::restore::handle_restore(&file)?,
 
         // placeholder commands for now - will implement later
         Commands::Migrate => println!("envkeep migrate: upgrading schema..."),
-        Commands::Backup => println!("envkeep backup: exporting vault..."),
-        Commands::Restore { file } => println!("envkeep restore: importing from {}...", file),
         Commands::Status => println!("envkeep status: showing active project..."),
         Commands::Recent => println!("envkeep recent: showing recent projects..."),
         Commands::Tui => println!("envkeep tui: launching..."),
