@@ -41,3 +41,6 @@ if ($CurrentPath -notlike "*$InstDir*") {
     Write-Host ""
     & $ExePath --help
 }
+
+# Anonymous install counter (no user data collected)
+try { Invoke-WebRequest -Uri "https://api.counterapi.dev/v1/envkeep/install-ps1/up" -UseBasicParsing -ErrorAction SilentlyContinue | Out-Null } catch {}

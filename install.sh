@@ -28,4 +28,8 @@ else
 fi
 
 echo "Installed envkeep to $DEST"
+
+# Anonymous install counter (no user data collected)
+curl -sf "https://api.counterapi.dev/v1/envkeep/install-sh/up" > /dev/null 2>&1 || true
+
 envkeep --help
